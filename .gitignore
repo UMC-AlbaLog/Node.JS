@@ -9,3 +9,4 @@
 /src/routes
 /dist
 /node_modules
+/src/generated/prisma

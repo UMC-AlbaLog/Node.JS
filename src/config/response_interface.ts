@@ -1,5 +1,10 @@
+enum ResultType {
+  SUCCESS = 'SUCCESS',
+  FAIL = 'FAIL',
+}
+
 interface ITsoaResponse<T> {
-  resultType: 'SUCCESS' | 'FAIL';
+  resultType: ResultType;
   error: {
     errorCode?: string;
     errorMessage?: string | null;
@@ -9,7 +14,7 @@ interface ITsoaResponse<T> {
 }
 
 class TsoaSuccessResponse<T> implements ITsoaResponse<T> {
-  resultType: 'SUCCESS' = 'SUCCESS';
+  resultType: ResultType = ResultType.SUCCESS;
   error: null = null;
   success: T;
 
@@ -19,7 +24,7 @@ class TsoaSuccessResponse<T> implements ITsoaResponse<T> {
 }
 
 class TsoaFailResponse<T> implements ITsoaResponse<T> {
-  resultType: 'FAIL' = 'FAIL';
+  resultType: ResultType = ResultType.FAIL;
   error: {
     errorCode?: string;
     errorMessage?: string | null;

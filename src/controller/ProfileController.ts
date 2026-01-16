@@ -1,6 +1,6 @@
 import { Controller, Get, Put, Route, Tags, Path, Body, SuccessResponse, Response } from 'tsoa';
 import ProfileService from '../service/ProfileService';
-import { ProfileResponseDto, UpdateProfileRequestDto } from '../dto/ProfileDto';
+import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/ProfileDto';
 import { TsoaSuccessResponse } from '../config/response_interface';
 
 /**
@@ -56,11 +56,11 @@ export class ProfileController extends Controller {
   }
 
   /**
-   * UUID 문자열을 Buffer로 변환
+   * UUID 문자열을 Uint8Array로 변환
    * @param uuid - UUID 문자열 (예: "550e8400-e29b-41d4-a716-446655440000")
-   * @returns Buffer
+   * @returns Uint8Array
    */
-  private uuidToBuffer(uuid: string): Buffer {
+  private uuidToBuffer(uuid: string): Uint8Array {
     const hex = uuid.replace(/-/g, '');
     return Buffer.from(hex, 'hex');
   }

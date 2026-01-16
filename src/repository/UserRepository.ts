@@ -11,7 +11,7 @@ class UserRepository {
    * @param userId - 사용자 ID (Binary(16) UUID)
    * @returns 사용자 정보
    */
-  async findUserById(userId: Buffer) {
+  async findUserById(userId: Uint8Array) {
     const user = await prisma.user.findUnique({
       where: { user_id: userId },
       include: {
@@ -33,7 +33,7 @@ class UserRepository {
    * @returns 수정된 사용자 정보
    */
   async updateUser(
-    userId: Buffer,
+    userId: Uint8Array,
     data: {
       user_name?: string;
       user_birth?: Date;
@@ -52,7 +52,7 @@ class UserRepository {
    * @param userId - 사용자 ID
    * @returns 총 근무 횟수
    */
-  async getUserWorkCount(userId: Buffer): Promise<number> {
+  async getUserWorkCount(userId: Uint8Array): Promise<number> {
     return await prisma.user_work_log.count({
       where: {
         user_id: userId,
@@ -66,7 +66,7 @@ class UserRepository {
    * @param userId - 사용자 ID
    * @returns 평균 평점 (0~5점)
    */
-  async getUserAverageRating(userId: Buffer): Promise<number> {
+  async getUserAverageRating(userId: Uint8Array): Promise<number> {
     const reviews = await prisma.store_review.findMany({
       where: { user_id: userId },
       select: {
@@ -89,7 +89,7 @@ class UserRepository {
    * @param userId - 사용자 ID
    * @returns 정산 정보 (은행명, 계좌번호, 예금주)
    */
-  async getSettlementInfo(userId: Buffer) {
+  async getSettlementInfo(userId: Uint8Array) {
     return await prisma.settlement_info.findUnique({
       where: { user_id: userId },
     });
@@ -101,7 +101,7 @@ class UserRepository {
    * @param data - 정산 정보
    */
   async updateSettlementInfo(
-    userId: Buffer,
+    userId: Uint8Array,
     data: {
       bank_name?: string;
       account_number?: string;

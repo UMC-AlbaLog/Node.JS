@@ -1,5 +1,5 @@
 import UserRepository from '../repository/UserRepository';
-import { ProfileResponseDto, UpdateProfileRequestDto } from '../dto/ProfileDto';
+import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/ProfileDto';
 
 /**
  * Profile Service
@@ -11,7 +11,7 @@ class ProfileService {
    * @param userId - 사용자 ID (Buffer 형식)
    * @returns 프로필 정보
    */
-  async getProfile(userId: Buffer): Promise<ProfileResponseDto> {
+  async getProfile(userId: Uint8Array): Promise<ProfileResponseDto> {
     // 1. Repository에서 사용자 정보 가져오기
     const user = await UserRepository.findUserById(userId);
 
@@ -47,7 +47,7 @@ class ProfileService {
    * @returns 수정된 프로필 정보
    */
   async updateProfile(
-    userId: Buffer,
+    userId: Uint8Array,
     data: UpdateProfileRequestDto,
   ): Promise<ProfileResponseDto> {
     // 1. 데이터 변환 (DTO → DB 형식)
@@ -108,11 +108,11 @@ class ProfileService {
 
   /**
    * Buffer(Binary UUID)를 문자열 UUID로 변환
-   * @param buffer - Buffer 형식의 UUID
+   * @param buffer - Uint8Array 형식의 UUID
    * @returns 문자열 UUID
    */
-  private bufferToUuid(buffer: Buffer): string {
-    const hex = buffer.toString('hex');
+  private bufferToUuid(buffer: Uint8Array): string {
+    const hex = Buffer.from(buffer).toString('hex');
     return `${hex.substring(0, 8)}-${hex.substring(8, 12)}-${hex.substring(12, 16)}-${hex.substring(16, 20)}-${hex.substring(20, 32)}`;
   }
 }

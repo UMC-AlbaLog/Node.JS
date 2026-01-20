@@ -1,5 +1,5 @@
-import UserRepository from '../repository/UserRepository';
-import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/ProfileDto';
+import UserRepository from '../repository/user_repository';
+import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/profile_dto';
 
 /**
  * Profile Service

@@ -1,6 +1,6 @@
 import { Controller, Get, Put, Route, Tags, Path, Body, SuccessResponse, Response } from 'tsoa';
-import ProfileService from '../service/ProfileService';
-import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/ProfileDto';
+import ProfileService from '../service/profile_service';
+import { ProfileResponseDto, UpdateProfileRequestDto } from '../DTO/profile_dto';
 import { TsoaSuccessResponse } from '../config/response_interface';
 
 /**

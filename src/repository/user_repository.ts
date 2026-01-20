@@ -1,5 +1,5 @@
 import prisma from '../config/prisma';
-import { UserNotFoundError } from '../DTO/errorDTO';
+import { UserNotFoundError } from '../DTO/error_dto';
 
 /**
  * User Repository
@@ -67,20 +67,17 @@ class UserRepository {
    * @returns 평균 평점 (0~5점)
    */
   async getUserAverageRating(userId: Uint8Array): Promise<number> {
-    const reviews = await prisma.store_review.findMany({
+    const result = await prisma.store_review.aggregate({
       where: { user_id: userId as Uint8Array<ArrayBuffer> },
-      select: {
-        total_score: true,
-      },
+      _avg: { total_score: true },
+      _count: true,
     });
 
-    if (reviews.length === 0) {
+    if (result._count === 0) {
       return 0; // 리뷰가 없으면 0점
     }
 
-    const totalScore = reviews.reduce((sum, review) => sum + (review.total_score || 0), 0);
-    const average = totalScore / reviews.length;
-
+    const average = result._avg.total_score ?? 0;
     return Math.round(average * 10) / 10; // 소수점 첫째자리까지
   }
 

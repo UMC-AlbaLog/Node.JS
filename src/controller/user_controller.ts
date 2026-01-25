@@ -1,7 +1,7 @@
 import { Get, Route, Tags, Request, Security, SuccessResponse, Response } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import { generateTokens } from '../config/jwt';
-import { UserNotFoundError } from '../DTO/errorDTO';
+import { UserNotFoundError } from '../DTO/error_dto';
 import UserService from '../service/user_service';
 import { TsoaSuccessResponse, TsoaFailResponse, ResultType } from '../config/response_interface';
 

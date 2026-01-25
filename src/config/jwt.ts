@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import prisma from './prisma';
 import uuid from 'uuid';
-import { InvalidTokenError } from '../DTO/errorDTO';
+import { InvalidTokenError } from '../DTO/error_dto';
 
 /**
  * jwt 토큰 발급 함수

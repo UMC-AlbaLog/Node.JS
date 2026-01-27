@@ -9,7 +9,6 @@ import {
 } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import IncomeDashboardService from '../service/income_dashboard_service';
-import { uuidToBin } from '../util/uuid'; // ✅ 네가 준 유틸 사용
 
 @Route('income')
 @Tags('Income')

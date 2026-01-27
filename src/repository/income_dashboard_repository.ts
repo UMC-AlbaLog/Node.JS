@@ -15,18 +15,18 @@ const workLogWithPostingArgs = Prisma.validator<Prisma.user_work_logFindManyArgs
 type WorkLogWithPosting = Prisma.user_work_logGetPayload<typeof workLogWithPostingArgs>;
 
 export class IncomeDashboardRepository {
-  // ✅ CHANGED: Buffer -> Uint8Array 로 받기
+  //  Buffer -> Uint8Array 로 받기
   async findWorkLogsForMonth(
     userId: Uint8Array,
     start: Date,
     end: Date,
   ): Promise<WorkLogWithPosting[]> {
-    // ✅ CHANGED: Prisma에는 Buffer로 넣기
+    //  Prisma에는 Buffer로 넣기
     const userIdBuf = Buffer.from(userId);
 
     return prisma.user_work_log.findMany({
       where: {
-        user_id: userIdBuf, // ✅ CHANGED
+        user_id: userIdBuf, 
         work_date: { gte: start, lt: end },
       },
       include: {
@@ -39,12 +39,12 @@ export class IncomeDashboardRepository {
     });
   }
 
-  // ✅ CHANGED: Buffer -> Uint8Array 로 받기
+  //  Buffer -> Uint8Array 로 받기
   async findUserAlbaSettlementStatuses(userId: Uint8Array) {
-    const userIdBuf = Buffer.from(userId); // ✅ CHANGED
+    const userIdBuf = Buffer.from(userId); 
 
     return prisma.user_alba.findMany({
-      where: { user_id: userIdBuf }, // ✅ CHANGED
+      where: { user_id: userIdBuf }, 
       select: { alba_id: true, settlement_status: true },
     });
   }

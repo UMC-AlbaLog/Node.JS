@@ -6,13 +6,13 @@ type GroupBy = 'store' | 'category';
 
 export class IncomeDashboardService {
   public async getDashboard(userId: string, month: string, groupBy: GroupBy) {
-    // ✅ CHANGED: UUID string -> Uint8Array(실제로는 Buffer지만 타입은 Uint8Array)
+    // UUID string -> Uint8Array(실제로는 Buffer지만 타입은 Uint8Array)
     const userIdBin = uuidToBuffer(userId);
 
     const { start, end, normalizedMonth } = this.getMonthRange(month);
 
     const [workLogs, userAlbas] = await Promise.all([
-      // ✅ CHANGED: 레포가 Uint8Array 받도록 맞출 예정
+
       incomeDashboardRepository.findWorkLogsForMonth(userIdBin, start, end),
       incomeDashboardRepository.findUserAlbaSettlementStatuses(userIdBin),
     ]);

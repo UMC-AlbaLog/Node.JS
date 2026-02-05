@@ -227,5 +227,4 @@ enum user_work_log_status {
   working
   done
   settled
-  absent
 }

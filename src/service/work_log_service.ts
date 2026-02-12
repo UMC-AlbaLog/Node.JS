@@ -1,5 +1,4 @@
 import WorkLogRepository from '../repository/work_log_repository';
-import prisma from '../config/prisma';
 import {
   TodayScheduleResponseDto,
   TodayWorkListResponseDto,
@@ -36,22 +35,6 @@ class WorkLogService {
     // Repository에서 오늘 날짜의 work_log 가져오기
     const workLogs = await WorkLogRepository.findWorkLogsByDate(userId, today);
 
-    // alba_posting이 없는 work_log의 schedule 정보를 일괄 조회
-    const scheduleIds = workLogs
-      .filter((log) => !log.alba_posting && log.user_alba_schedule_id)
-      .map((log) => log.user_alba_schedule_id as Uint8Array<ArrayBuffer>);
-
-    const scheduleMap = new Map<string, { workplace: string | null; hourly_wage: number | null }>();
-    if (scheduleIds.length > 0) {
-      const schedules = await prisma.user_alba_schedule.findMany({
-        where: { user_alba_schedule_id: { in: scheduleIds } },
-        select: { user_alba_schedule_id: true, workplace: true, hourly_wage: true },
-      });
-      for (const s of schedules) {
-        scheduleMap.set(Buffer.from(s.user_alba_schedule_id).toString('hex'), s);
-      }
-    }
-
     // DTO 형식으로 변환
     const scheduleDtos: TodayScheduleResponseDto[] = workLogs.map((log) => {
       const { startTime, endTime, workHours } = this.parseWorkLogTime(
@@ -60,22 +43,7 @@ class WorkLogService {
         log.work_minutes,
       );
 
-      // alba_posting이 있으면 사용, 없으면 schedule에서 fallback
-      let workplace = '';
-      let hourlyWage = 0;
-
-      if (log.alba_posting) {
-        workplace = log.alba_posting.store.store_name || '';
-        hourlyWage = log.alba_posting.hourly_rate || 0;
-      } else if (log.user_alba_schedule_id) {
-        const key = Buffer.from(log.user_alba_schedule_id).toString('hex');
-        const schedule = scheduleMap.get(key);
-        if (schedule) {
-          workplace = schedule.workplace || '';
-          hourlyWage = schedule.hourly_wage || 0;
-        }
-      }
-
+      const hourlyWage = log.alba_posting.hourly_rate || 0;
       const totalWage = Math.round(hourlyWage * workHours);
       const status = log.status || 'scheduled';
 
@@ -83,7 +51,7 @@ class WorkLogService {
         workLogId: bufferToUuid(log.user_work_log_id),
         status,
         statusLabel: STATUS_LABELS[status] || '알 수 없음',
-        workplace,
+        workplace: log.alba_posting.store.store_name || '',
         startTime,
         endTime,
         workHours,
